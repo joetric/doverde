@@ -1,3 +1,7 @@
+.pkl
+
+### Below code is GitHub's default Python .gitignore ###
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
