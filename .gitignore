@@ -1,3 +1,7 @@
+/brand/
+/data/
+/pubs/
+
 .pkl
 
 ### Below code is GitHub's default Python .gitignore ###
