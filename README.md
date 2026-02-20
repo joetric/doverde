@@ -1,4 +1,4 @@
-# dnrec-parks-fiscal-analysis
+# dnrec-dpr-revex-engine
 Delaware State Parks automated revenue and expense ETL and analysis using the Polars and Socrata Open Data API
 
 ## Configuration in config.yaml
