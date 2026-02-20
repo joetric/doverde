@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dnrec-dpr-revex-engine"
+version = "0.1.0"
+description = "Scenario-based Revenue/Expenditure (REVEX) modeling for Delaware State Parks."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Joseph Tricarico"}
+]
+keywords = ["DNREC", "DPR", "Delaware", "Fiscal", "Budget"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Office/Business :: Financial",
+]
+
+dependencies = [
+    "polars>=1.2.0",      # High-speed data processing (May 2024+ standard)
+    "statsmodels>=0.14",  # Formal ANOVA and t-test rigor
+    "xlsxwriter>=3.1",    # For exporting executive briefings to Excel
+    "pyyaml>=6.0",        # To read your external config.yaml settings
+]
+
+[project.urls]
+Homepage = "https://github.com/joetric/dnrec-dpr-revex-engine"
+
+[tool.hatch.build.targets.wheel]
+# This tells Hatch to include your package folder
+packages = ["dpr_revex"]
+
+[tool.hatch.metadata]
+# Ensures your internal settings.py is recognized
+allow-direct-references = true

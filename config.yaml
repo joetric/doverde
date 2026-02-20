@@ -1,0 +1,38 @@
+# config.yaml
+paths:
+  # Base directory for Parquet files in Drive
+  raw_dir: "/content/drive/MyDrive/dnrec_dpr_revex_engine/data/raw"
+  processed_dir: "/content/drive/MyDrive/dnrec_dpr_revex_engine/data/raw"
+
+socrata:
+  api_url: "data.delaware.gov"
+  # limit: 5 # just to test; be kind to Socrata
+  limit: 500_000
+  force_refresh: True
+  api_data_ids:
+    ex: "5s6n-7hpx"
+    rev: "it4a-m3yd"
+  api_filters:
+    department: "DEPT OF NATRL RES AND ENV CONT"
+    division: "PARKS AND RECREATION"
+  api_default_fields:
+    ex:
+      - fiscal_year
+      - fiscal_period
+      - vendor
+      - category
+      - fund_type
+      - check_number
+      - check_date
+      - amount
+      #-department
+      #-division
+    rev:
+      - fiscal_year
+      - category
+      - general_fund
+      - federal_fund
+      - capital_fund
+      - special_fund
+      #-department
+      #-division
