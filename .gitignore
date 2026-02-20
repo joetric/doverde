@@ -1,10 +1,22 @@
+########################################################
+###      .gitignore for dnrec-dpr-revex-engine       ###
+########################################################
+
+# project dirs
 /brand/
 /data/
 /pubs/
 
-.pkl
+# notebooks - these will be converted to .py with dev tools
+*.ipynb
 
+# data file types
+*.pkl
+*.parquet
+
+########################################################
 ### Below code is GitHub's default Python .gitignore ###
+########################################################
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
