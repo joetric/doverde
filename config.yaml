@@ -2,7 +2,7 @@
 paths:
   # Base directory for Parquet files in Drive
   raw_dir: "/content/drive/MyDrive/dnrec_dpr_revex_engine/data/raw"
-  processed_dir: "/content/drive/MyDrive/dnrec_dpr_revex_engine/data/raw"
+  processed_dir: "/content/drive/MyDrive/dnrec_dpr_revex_engine/data/processed"
 
 socrata:
   api_url: "data.delaware.gov"

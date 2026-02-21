@@ -56,7 +56,7 @@ def init_repo():
 # %% [markdown] id="FXd2d8XSvnkv"
 # ## Convert Jupyter notebooks to .py
 
-# %% id="f9QtbH1Ru16o" executionInfo={"status": "aborted", "timestamp": 1771619578509, "user_tz": 300, "elapsed": 2070, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% colab={"base_uri": "https://localhost:8080/"} id="f9QtbH1Ru16o" executionInfo={"status": "ok", "timestamp": 1771620758680, "user_tz": 300, "elapsed": 9327, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="98b3fe27-ac35-4fb2-b710-596ff8652055"
 import subprocess
 
 nb_dir = PROJ / 'dpr_revex'
@@ -64,4 +64,13 @@ for nb in nb_dir.glob('*.ipynb'):
     result = subprocess.run(['jupytext', '--to', 'py', str(nb)], capture_output=True, text=True)
     print(f'{"✓" if result.returncode == 0 else "✗"} {nb.name}')
 
-# %% colab={"base_uri": "https://localhost:8080/"} id="bgHuOEu5vt74" executionInfo={"status": "ok", "timestamp": 1771620224535, "user_tz": 300, "elapsed": 123, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="2f920f00-736e-4b68-ac2c-62c33592d9b6"
+# %% [markdown] id="kN7nPAEN0nyQ"
+# ## Git commit
+
+# %% colab={"base_uri": "https://localhost:8080/"} id="bgHuOEu5vt74" executionInfo={"status": "ok", "timestamp": 1771621286120, "user_tz": 300, "elapsed": 5091, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="069dc6c3-ff3b-41cc-b3ac-5940161b95c7"
+msg = input('Commit message: ')
+# # !git config --global user.email "your.name@delaware.gov"
+# # !git config --global user.name "Firstname Lastname"
+# !git -C {PROJ} add *.py *.yaml *.toml .gitignore
+# !git -C {PROJ} commit -m "{msg}"
+# !git -C {PROJ} push origin main
