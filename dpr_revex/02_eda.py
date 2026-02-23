@@ -17,7 +17,7 @@
 # %% [markdown] id="IG85ghvsAcJx"
 # ## Setup
 
-# %% id="LvLzrQitlfh_" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771879787139, "user_tz": 300, "elapsed": 1579, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="57e902ed-571f-4462-b363-72abd870ede4"
+# %% id="LvLzrQitlfh_" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771883056626, "user_tz": 300, "elapsed": 1885, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="c08f780d-a527-4dbd-abc2-5e7a858b5fe8"
 import sys
 from datetime import date
 from pathlib import Path
@@ -36,7 +36,7 @@ data_table.enable_dataframe_formatter()
 # %% [markdown] id="30aBKmeUAWqI"
 # ## Load files to DataFrames
 
-# %% id="bWLLM-cw6XpQ" executionInfo={"status": "ok", "timestamp": 1771879787179, "user_tz": 300, "elapsed": 37, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="bWLLM-cw6XpQ" executionInfo={"status": "ok", "timestamp": 1771883056792, "user_tz": 300, "elapsed": 136, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 data_dir = Path(cfg.paths.raw_dir)
 
 rev_file = Path(data_dir) / 'rev.parquet'
@@ -53,7 +53,7 @@ dfe = pl.read_parquet(ex_file)
 #
 #
 
-# %% id="n3Gb5D6PFTk6" executionInfo={"status": "ok", "timestamp": 1771879787214, "user_tz": 300, "elapsed": 32, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="n3Gb5D6PFTk6" executionInfo={"status": "ok", "timestamp": 1771883056845, "user_tz": 300, "elapsed": 32, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 _conditional = pl.col('fiscal_year') != 2026
 dfr = dfr.filter(_conditional)
 dfe = dfe.filter(_conditional)
@@ -63,7 +63,7 @@ dfe = dfe.filter(_conditional)
 #
 # clean null data; add sum col; view shape, dtypes and data
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 700} id="dYG4Z8pj_J6m" executionInfo={"status": "ok", "timestamp": 1771879787664, "user_tz": 300, "elapsed": 448, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="ad12b569-19c6-4c2d-efa3-b291c04d6bec"
+# %% colab={"base_uri": "https://localhost:8080/", "height": 700} id="dYG4Z8pj_J6m" executionInfo={"status": "ok", "timestamp": 1771883058617, "user_tz": 300, "elapsed": 1769, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="40996c42-0b58-4780-aa9d-6c2d4b6d8fc1"
 dfr = (dfr
     .fill_nan(0)
     .with_columns(pl.sum_horizontal(cs.ends_with('fund')).alias('total'))
@@ -87,7 +87,7 @@ dfr_pd
 # %% [markdown] id="d_QDqAsTtVMt"
 # ### Group and aggregate by category, ignoring FY
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 662} id="USrLjVeVtTSm" executionInfo={"status": "ok", "timestamp": 1771879787686, "user_tz": 300, "elapsed": 16, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="e018b8be-f6f0-40c6-aba0-845011453080"
+# %% colab={"base_uri": "https://localhost:8080/", "height": 662} id="USrLjVeVtTSm" executionInfo={"status": "ok", "timestamp": 1771883058653, "user_tz": 300, "elapsed": 31, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="4b9c16b8-65b7-48ce-a24f-19e7c1b70808"
 grouped_dfr = dfr.group_by('category').agg(
     cs.contains('fund').sum().name.suffix('_sum'),
     pl.col('total').sum().alias('overall_total_sum')
@@ -100,7 +100,7 @@ grouped_dfr.to_pandas(use_pyarrow_extension_array=True)
 #
 # 'Prior year adjustment' has non-zero values in multiple fields, which makes sense.
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 130} id="a647f474" executionInfo={"status": "ok", "timestamp": 1771879787705, "user_tz": 300, "elapsed": 16, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="6ec5ee0b-ef1d-4385-9398-3ce6b494e899"
+# %% colab={"base_uri": "https://localhost:8080/", "height": 130} id="a647f474" executionInfo={"status": "ok", "timestamp": 1771883058982, "user_tz": 300, "elapsed": 326, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="450082b9-59eb-4075-82bb-2db4a16761bc"
 # ID what categories have values in multiple funds
 # ie. ID multi-fund entries
 dfr_non_single_fund = grouped_dfr.with_columns(
@@ -113,7 +113,7 @@ dfr_non_single_fund.to_pandas(use_pyarrow_extension_array=True)
 # %% [markdown] id="e2QZ1Km4c7NU"
 # ### Pivot Revenue by FY, indexed on category (value = total rev.)
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 645} id="FHK3MrQ5RDvG" executionInfo={"status": "ok", "timestamp": 1771879787957, "user_tz": 300, "elapsed": 249, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="c7077632-8b21-49f0-95a1-a97caa0377f3"
+# %% colab={"base_uri": "https://localhost:8080/", "height": 645} id="FHK3MrQ5RDvG" executionInfo={"status": "ok", "timestamp": 1771883058997, "user_tz": 300, "elapsed": 10, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="aa3781bb-eb93-4ab8-9e29-01f0b8644237"
 dfr_pivot = dfr.pivot("fiscal_year", index="category", values="total")
 dfr_pivot.to_pandas(use_pyarrow_extension_array=True).fillna(0) # display as pd df
 
@@ -123,13 +123,13 @@ dfr_pivot.to_pandas(use_pyarrow_extension_array=True).fillna(0) # display as pd 
 # %% [markdown] id="OH6cBg4mAg8b"
 # ## Explore Payments
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 255} id="Sr_gL6GXAiFJ" executionInfo={"status": "ok", "timestamp": 1771879787968, "user_tz": 300, "elapsed": 8, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="f4fcc2f3-c292-4c7e-83cd-b292f7cff164"
+# %% colab={"base_uri": "https://localhost:8080/", "height": 255} id="Sr_gL6GXAiFJ" executionInfo={"status": "ok", "timestamp": 1771883059008, "user_tz": 300, "elapsed": 13, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="63541801-eb30-4b21-82bf-c0ec8af490bd"
 dfe.head(5)
 
 # %% [markdown] id="8a31HNVKYh_a"
 # ### Pivot Payments by Vendor and FY
 
-# %% id="kcU3skOR6fD0" executionInfo={"status": "ok", "timestamp": 1771879787973, "user_tz": 300, "elapsed": 3, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="kcU3skOR6fD0" executionInfo={"status": "ok", "timestamp": 1771883059038, "user_tz": 300, "elapsed": 28, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 # CLEAN DATA
 # would have to cast vendor to str, then back to cat - really not needed for our analysis
 # without this, the below code won't work, but gives an idea of what this would look like
@@ -137,7 +137,7 @@ dfe.head(5)
 #     pl.col('vendor').str.replace_all('SAUL EWING ARNSTEIN & LEHR LLP', 'SAUL EWING LLP')
 # )
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 645} id="C80iNeO1Pz3w" executionInfo={"status": "ok", "timestamp": 1771879788879, "user_tz": 300, "elapsed": 903, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="2ea03042-202f-490c-d748-f389bfee7bb0"
+# %% colab={"base_uri": "https://localhost:8080/", "height": 645} id="C80iNeO1Pz3w" executionInfo={"status": "ok", "timestamp": 1771883059765, "user_tz": 300, "elapsed": 721, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="7a6c8de1-139d-4015-9ae8-1b7feabc644e"
 # Pivot by Vendor and FY
 dfe_pivot_pd = (dfe.group_by(['vendor', 'fiscal_year'])
  .agg(pl.col('amount').sum())
@@ -159,7 +159,7 @@ dfe_pivot_pd
 #
 # The following script loads the Excel file and merges it to the payment data frame.
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 245} id="CBAhMXf3B-Bu" executionInfo={"status": "error", "timestamp": 1771879794038, "user_tz": 300, "elapsed": 5151, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="6c1db51c-073d-45e9-b6de-e6ee35b8167c"
+# %% colab={"base_uri": "https://localhost:8080/"} id="CBAhMXf3B-Bu" executionInfo={"status": "ok", "timestamp": 1771883067406, "user_tz": 300, "elapsed": 7634, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="c337c204-5e02-4487-eee0-0b499327aa4e"
 # load Excel to Polars
 # merge on idx
 # !pip install -q fastexcel
@@ -176,11 +176,19 @@ print(f'{df_exp_class.shape=}')
 print(f'{df_exp_class.dtypes=}')
 
 dfe = (dfe.with_columns(pl.col('vendor').cast(pl.String))
-    .join(df_exp_class, on='vendor'
-    .with_columns(pl.col('my_classification').cast(pl.Categorical)))
+    .join(df_exp_class, on='vendor')
+    .with_columns(pl.col('my_classification').cast(pl.Categorical))
 )
 
-dfe.write_csv('/content/drive/MyDrive/dnrec_dpr_revex_engine/data/processed/exp.csv')
+dfe.write_csv('/content/drive/MyDrive/dnrec_dpr_revex_engine/data/processed/exp.csv') #for tableau
 
-# %% id="tldoVh2ZKFFa" executionInfo={"status": "aborted", "timestamp": 1771879794026, "user_tz": 300, "elapsed": 8647, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% colab={"base_uri": "https://localhost:8080/", "height": 443} id="tldoVh2ZKFFa" executionInfo={"status": "ok", "timestamp": 1771883067452, "user_tz": 300, "elapsed": 38, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="d413aec6-6d6c-40e2-a26d-c846318db21f"
 dfe # too many rows for Google data_table (20K limit)
+
+# %% [markdown] id="_sLC2W2rcyHQ"
+# ### View unique payment classifications
+#
+# Helps verify that we are using the correct copy of the Excel file. Session restart required if Excel file updated.
+
+# %% colab={"base_uri": "https://localhost:8080/", "height": 680} id="r_0xr9rCcaN-" executionInfo={"status": "ok", "timestamp": 1771883067463, "user_tz": 300, "elapsed": 8, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="52efdffc-32b9-42b4-9638-0525dd4e3703"
+dfe['my_classification'].unique().to_pandas()

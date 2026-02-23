@@ -14,7 +14,7 @@
 # %% [markdown] id="8lP7mci0vqPa"
 # # Dev Tools
 
-# %% id="4Mna7DKmvSgF" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771879408155, "user_tz": 300, "elapsed": 30307, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="b7bb1c41-9df8-4027-dc26-14e72370ad97"
+# %% id="4Mna7DKmvSgF" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771882181643, "user_tz": 300, "elapsed": 1740, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="83934680-7b96-43e9-b091-b92f10ba0c13"
 import os, subprocess, sys
 from pathlib import Path
 from google.colab import drive, userdata
@@ -27,7 +27,7 @@ REPO = 'joetric/dnrec-dpr-revex-engine'
 GITHUB_TOKEN = userdata.get('GITHUB_TOKEN')
 
 
-# %% id="noACbGrpv5XK"
+# %% id="noACbGrpv5XK" executionInfo={"status": "ok", "timestamp": 1771882181677, "user_tz": 300, "elapsed": 23, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 def clone_repo():
     token = userdata.get('GITHUB_TOKEN') # get GitHub token for colab; repo and content scoped
     result = subprocess.run(
@@ -56,7 +56,7 @@ def init_repo():
 # %% [markdown] id="FXd2d8XSvnkv"
 # ## Convert Jupyter notebooks to .py
 
-# %% colab={"base_uri": "https://localhost:8080/"} id="f9QtbH1Ru16o" executionInfo={"status": "ok", "timestamp": 1771879442768, "user_tz": 300, "elapsed": 11059, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="5fb57adb-7884-4dc9-b332-e48ecf7823ed"
+# %% colab={"base_uri": "https://localhost:8080/"} id="f9QtbH1Ru16o" executionInfo={"status": "ok", "timestamp": 1771882190641, "user_tz": 300, "elapsed": 8961, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="6a8bc82a-88d5-49a9-e98b-693e22731074"
 import subprocess
 
 nb_dir = PROJ / 'dpr_revex'
@@ -67,11 +67,17 @@ for nb in nb_dir.glob('*.ipynb'):
 # %% [markdown] id="kN7nPAEN0nyQ"
 # ## Git commit
 
-# %% colab={"base_uri": "https://localhost:8080/"} id="bgHuOEu5vt74" executionInfo={"status": "ok", "timestamp": 1771632985927, "user_tz": 300, "elapsed": 6081, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="98c378a1-aaa7-4686-8172-d26434bb5e1e"
-msg = input('Commit message: ')
+# %% colab={"base_uri": "https://localhost:8080/"} id="gkSjkskybFVE" executionInfo={"status": "ok", "timestamp": 1771882719463, "user_tz": 300, "elapsed": 644, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="71b80364-d405-465d-a499-8ccbfdcafc1d"
+print("--- PRE-COMMIT STATUS ---")
+# !git -C {PROJ} status
+
+# %% colab={"base_uri": "https://localhost:8080/"} id="bgHuOEu5vt74" executionInfo={"status": "ok", "timestamp": 1771882255146, "user_tz": 300, "elapsed": 64503, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="bcc2336a-67e1-48a4-9f53-333aece382af"
 # !git config --global user.email "joseph.tricarico@delaware.gov"
 # !git config --global user.name "Joseph Tricarico"
 # !git -C {PROJ} pull origin main
-# !git -C {PROJ} add *.py *.yaml *.toml .gitignore
+# !git -C {PROJ} add *.py *.yaml *.toml *.csv .gitignore
+# !git -C {PROJ} status
+
+msg = input('Commit message: ')
 # !git -C {PROJ} commit -m "{msg}"
 # !git -C {PROJ} push origin main
