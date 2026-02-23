@@ -4,7 +4,7 @@
 
 # project dirs
 /brand/
-/data/
+# /data/
 /pubs/
 
 # notebooks - these will be converted to .py with dev tools
@@ -13,6 +13,8 @@
 # data file types
 *.pkl
 *.parquet
+*.xlsx
+
 
 # Secrets
 .env
