@@ -14,7 +14,7 @@
 # %% [markdown] id="8lP7mci0vqPa"
 # # Dev Tools
 
-# %% colab={"base_uri": "https://localhost:8080/"} id="4Mna7DKmvSgF" executionInfo={"status": "ok", "timestamp": 1771632334999, "user_tz": 300, "elapsed": 22904, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="18424070-f200-4775-90df-81c11e964202"
+# %% id="4Mna7DKmvSgF" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771879408155, "user_tz": 300, "elapsed": 30307, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="b7bb1c41-9df8-4027-dc26-14e72370ad97"
 import os, subprocess, sys
 from pathlib import Path
 from google.colab import drive, userdata
@@ -27,7 +27,7 @@ REPO = 'joetric/dnrec-dpr-revex-engine'
 GITHUB_TOKEN = userdata.get('GITHUB_TOKEN')
 
 
-# %% id="noACbGrpv5XK" executionInfo={"status": "ok", "timestamp": 1771632335036, "user_tz": 300, "elapsed": 30, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="noACbGrpv5XK"
 def clone_repo():
     token = userdata.get('GITHUB_TOKEN') # get GitHub token for colab; repo and content scoped
     result = subprocess.run(
@@ -56,7 +56,7 @@ def init_repo():
 # %% [markdown] id="FXd2d8XSvnkv"
 # ## Convert Jupyter notebooks to .py
 
-# %% colab={"base_uri": "https://localhost:8080/"} id="f9QtbH1Ru16o" outputId="a16e9842-b87a-46a7-dcfa-f817d0f05b45"
+# %% colab={"base_uri": "https://localhost:8080/"} id="f9QtbH1Ru16o" executionInfo={"status": "ok", "timestamp": 1771879442768, "user_tz": 300, "elapsed": 11059, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="5fb57adb-7884-4dc9-b332-e48ecf7823ed"
 import subprocess
 
 nb_dir = PROJ / 'dpr_revex'
@@ -67,7 +67,7 @@ for nb in nb_dir.glob('*.ipynb'):
 # %% [markdown] id="kN7nPAEN0nyQ"
 # ## Git commit
 
-# %% id="bgHuOEu5vt74"
+# %% colab={"base_uri": "https://localhost:8080/"} id="bgHuOEu5vt74" executionInfo={"status": "ok", "timestamp": 1771632985927, "user_tz": 300, "elapsed": 6081, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="98c378a1-aaa7-4686-8172-d26434bb5e1e"
 msg = input('Commit message: ')
 # !git config --global user.email "joseph.tricarico@delaware.gov"
 # !git config --global user.name "Joseph Tricarico"
@@ -75,7 +75,3 @@ msg = input('Commit message: ')
 # !git -C {PROJ} add *.py *.yaml *.toml .gitignore
 # !git -C {PROJ} commit -m "{msg}"
 # !git -C {PROJ} push origin main
-
-# %% id="x7_IHIhkhTnc"
-# !git -C {PROJ} fetch
-# !git -C {PROJ} pull

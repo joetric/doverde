@@ -12,16 +12,18 @@
 # ---
 
 # %% [markdown] id="JUxW312z-yhg"
-# # EDA: DNREC DPR Revenue and Expenses
+# # EDA & Classification: DNREC DPR Revenue and Expenses
 
 # %% [markdown] id="IG85ghvsAcJx"
 # ## Setup
 
-# %% id="LvLzrQitlfh_" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771629742317, "user_tz": 300, "elapsed": 784, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="1305134c-dcde-417c-e62c-9d939cca7735"
+# %% id="LvLzrQitlfh_" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771879787139, "user_tz": 300, "elapsed": 1579, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="57e902ed-571f-4462-b363-72abd870ede4"
 import sys
+from datetime import date
 from pathlib import Path
 
 from google.colab import data_table, drive
+# import missingno as msno
 import polars as pl
 import polars.selectors as cs
 
@@ -34,7 +36,7 @@ data_table.enable_dataframe_formatter()
 # %% [markdown] id="30aBKmeUAWqI"
 # ## Load files to DataFrames
 
-# %% id="bWLLM-cw6XpQ" executionInfo={"status": "ok", "timestamp": 1771629742363, "user_tz": 300, "elapsed": 36, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="bWLLM-cw6XpQ" executionInfo={"status": "ok", "timestamp": 1771879787179, "user_tz": 300, "elapsed": 37, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 data_dir = Path(cfg.paths.raw_dir)
 
 rev_file = Path(data_dir) / 'rev.parquet'
@@ -51,22 +53,27 @@ dfe = pl.read_parquet(ex_file)
 #
 #
 
-# %% id="n3Gb5D6PFTk6" executionInfo={"status": "ok", "timestamp": 1771629933870, "user_tz": 300, "elapsed": 5, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="n3Gb5D6PFTk6" executionInfo={"status": "ok", "timestamp": 1771879787214, "user_tz": 300, "elapsed": 32, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 _conditional = pl.col('fiscal_year') != 2026
 dfr = dfr.filter(_conditional)
 dfe = dfe.filter(_conditional)
 
 # %% [markdown] id="UKTaGZKdAfrA"
 # ## Explore Revenue
+#
+# clean null data; add sum col; view shape, dtypes and data
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 641} id="dYG4Z8pj_J6m" executionInfo={"status": "ok", "timestamp": 1771629934265, "user_tz": 300, "elapsed": 389, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="73a00f2d-c7d3-4c4a-8736-5313c8ff4c9c"
+# %% colab={"base_uri": "https://localhost:8080/", "height": 700} id="dYG4Z8pj_J6m" executionInfo={"status": "ok", "timestamp": 1771879787664, "user_tz": 300, "elapsed": 448, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="ad12b569-19c6-4c2d-efa3-b291c04d6bec"
 dfr = (dfr
-    .with_columns(
-        pl.sum_horizontal(cs.ends_with('fund')).alias('total')
-    )
+    .fill_nan(0)
+    .with_columns(pl.sum_horizontal(cs.ends_with('fund')).alias('total'))
 )
 
-dfr.to_pandas()
+print(f'{dfr.dtypes=}')
+print(f'{dfr.shape=}')
+
+dfr_pd = dfr.to_pandas(use_pyarrow_extension_array=True) # don't have time to learn Polars | also Colab data_table only takes Pandas
+dfr_pd
 
 # %% [markdown] id="3hlnnWn4Ol2x"
 # ### Casually observed anomalies
@@ -77,19 +84,103 @@ dfr.to_pandas()
 #
 #
 
+# %% [markdown] id="d_QDqAsTtVMt"
+# ### Group and aggregate by category, ignoring FY
+
+# %% colab={"base_uri": "https://localhost:8080/", "height": 662} id="USrLjVeVtTSm" executionInfo={"status": "ok", "timestamp": 1771879787686, "user_tz": 300, "elapsed": 16, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="e018b8be-f6f0-40c6-aba0-845011453080"
+grouped_dfr = dfr.group_by('category').agg(
+    cs.contains('fund').sum().name.suffix('_sum'),
+    pl.col('total').sum().alias('overall_total_sum')
+)
+print(f'{grouped_dfr.shape=}')
+grouped_dfr.to_pandas(use_pyarrow_extension_array=True)
+
+# %% [markdown] id="wLKJLovltkv2"
+# ### ID categories with values in multiple funds
+#
+# 'Prior year adjustment' has non-zero values in multiple fields, which makes sense.
+
+# %% colab={"base_uri": "https://localhost:8080/", "height": 130} id="a647f474" executionInfo={"status": "ok", "timestamp": 1771879787705, "user_tz": 300, "elapsed": 16, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="6ec5ee0b-ef1d-4385-9398-3ce6b494e899"
+# ID what categories have values in multiple funds
+# ie. ID multi-fund entries
+dfr_non_single_fund = grouped_dfr.with_columns(
+    pl.sum_horizontal(cs.contains('fund') != 0).alias('multifund_cat_count')
+).filter(pl.col('multifund_cat_count') > 1)
+
+print(f'{dfr_non_single_fund.shape=}')
+dfr_non_single_fund.to_pandas(use_pyarrow_extension_array=True)
+
+# %% [markdown] id="e2QZ1Km4c7NU"
+# ### Pivot Revenue by FY, indexed on category (value = total rev.)
+
+# %% colab={"base_uri": "https://localhost:8080/", "height": 645} id="FHK3MrQ5RDvG" executionInfo={"status": "ok", "timestamp": 1771879787957, "user_tz": 300, "elapsed": 249, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="c7077632-8b21-49f0-95a1-a97caa0377f3"
+dfr_pivot = dfr.pivot("fiscal_year", index="category", values="total")
+dfr_pivot.to_pandas(use_pyarrow_extension_array=True).fillna(0) # display as pd df
+
+# %% [markdown] id="CcnQBQB_QuLy"
+# Good - no null values
+
 # %% [markdown] id="OH6cBg4mAg8b"
 # ## Explore Payments
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 255} id="Sr_gL6GXAiFJ" executionInfo={"status": "ok", "timestamp": 1771630125471, "user_tz": 300, "elapsed": 34, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="4c9194dd-e1f8-4f25-ef16-df3161af1283"
+# %% colab={"base_uri": "https://localhost:8080/", "height": 255} id="Sr_gL6GXAiFJ" executionInfo={"status": "ok", "timestamp": 1771879787968, "user_tz": 300, "elapsed": 8, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="f4fcc2f3-c292-4c7e-83cd-b292f7cff164"
 dfe.head(5)
 
 # %% [markdown] id="8a31HNVKYh_a"
-# ### Pivot by Vendor and FY
+# ### Pivot Payments by Vendor and FY
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 821} id="C80iNeO1Pz3w" executionInfo={"status": "ok", "timestamp": 1771630254395, "user_tz": 300, "elapsed": 521, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="b4ed5069-834e-4f7a-f15d-e2f2c9f3b08d"
-(dfe.group_by(['vendor', 'fiscal_year'])
+# %% id="kcU3skOR6fD0" executionInfo={"status": "ok", "timestamp": 1771879787973, "user_tz": 300, "elapsed": 3, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# CLEAN DATA
+# would have to cast vendor to str, then back to cat - really not needed for our analysis
+# without this, the below code won't work, but gives an idea of what this would look like
+# dfe = dfe.with_columns(
+#     pl.col('vendor').str.replace_all('SAUL EWING ARNSTEIN & LEHR LLP', 'SAUL EWING LLP')
+# )
+
+# %% colab={"base_uri": "https://localhost:8080/", "height": 645} id="C80iNeO1Pz3w" executionInfo={"status": "ok", "timestamp": 1771879788879, "user_tz": 300, "elapsed": 903, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="2ea03042-202f-490c-d748-f389bfee7bb0"
+# Pivot by Vendor and FY
+dfe_pivot_pd = (dfe.group_by(['vendor', 'fiscal_year'])
  .agg(pl.col('amount').sum())
  .sort('fiscal_year', 'amount', descending=True)
  .pivot(on='fiscal_year', index='vendor', values='amount')
  .to_pandas(use_pyarrow_extension_array=True)
+ .sort_values('2025', ascending=False)
+#  .fillna(0)
 )
+#TODO: automatically save Excel file to Google Drive
+dfe_pivot_pd
+
+# %% [markdown] id="zf92uDM_5NJf"
+# ### Classify Vendors (Payees)
+#
+# Vendor pivot table was exported to Excel for manual tagging. Pareto analysis was used to only tag "vendors" that comprised the top 95% of total spending. (~200/1200).
+#
+# Note: "Vendor" can be a misnomer in this table as it includes items like payroll expenses and benefits. Vendors also include other agencies outside of DPR.
+#
+# The following script loads the Excel file and merges it to the payment data frame.
+
+# %% colab={"base_uri": "https://localhost:8080/", "height": 245} id="CBAhMXf3B-Bu" executionInfo={"status": "error", "timestamp": 1771879794038, "user_tz": 300, "elapsed": 5151, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="6c1db51c-073d-45e9-b6de-e6ee35b8167c"
+# load Excel to Polars
+# merge on idx
+# !pip install -q fastexcel
+df_exp_class = (
+    pl.read_excel('/content/drive/MyDrive/dnrec_dpr_revex_engine/data/classified/manual-exp-classification.xlsx')
+    .select([
+        # 'index',
+        'vendor',
+        'my_classification',
+    ])
+)
+# explore new loaded DF just as a sanity check
+print(f'{df_exp_class.shape=}')
+print(f'{df_exp_class.dtypes=}')
+
+dfe = (dfe.with_columns(pl.col('vendor').cast(pl.String))
+    .join(df_exp_class, on='vendor'
+    .with_columns(pl.col('my_classification').cast(pl.Categorical)))
+)
+
+dfe.write_csv('/content/drive/MyDrive/dnrec_dpr_revex_engine/data/processed/exp.csv')
+
+# %% id="tldoVh2ZKFFa" executionInfo={"status": "aborted", "timestamp": 1771879794026, "user_tz": 300, "elapsed": 8647, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+dfe # too many rows for Google data_table (20K limit)

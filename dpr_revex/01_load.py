@@ -22,7 +22,7 @@
 #
 # You could edit the fetch method on this page to use a Socrata API key (may allow for higher limits).
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 24064, "status": "ok", "timestamp": 1771613646788, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="R7sxD9UXB2lr" outputId="765f29db-1d15-4fdb-9ed9-01efe420896e"
+# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 21295, "status": "ok", "timestamp": 1771814359364, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="R7sxD9UXB2lr" outputId="8c96f01d-0164-4153-e33f-ea6eb17a4b4d"
 # @title
 from datetime import datetime
 import sys
@@ -38,7 +38,7 @@ sys.path.append('/content/drive/MyDrive/dnrec_dpr_revex_engine/dpr_revex')
 from config import cfg, FISC_PD_TO_CAL_MO
 
 
-# %% id="MxRbieC7vCMU"
+# %% executionInfo={"elapsed": 8, "status": "ok", "timestamp": 1771814359380, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="MxRbieC7vCMU"
 def _fp_to_cal_mo(fp: int) -> int:
     """Convert fiscal period to calendar month for a July-start FY (e.g. Del.)
 
@@ -111,7 +111,7 @@ def save_df(df, data_id_key):
 # %% [markdown] id="3JWVweXBNUp5"
 # ## Fetch Data
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 21824, "status": "ok", "timestamp": 1771613707755, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="of78GLICB6Tr" outputId="5a2e162a-17f1-4c1a-f158-663503d336f7"
+# %% colab={"base_uri": "https://localhost:8080/"} id="of78GLICB6Tr" outputId="17bf4642-aeec-4c99-dc24-8ab1d5be046d"
 force_refresh = getattr(cfg.socrata, 'force_refresh', False)
 dfe = fetch_dataset('ex', force_refresh=force_refresh)
 dfr = fetch_dataset('rev', force_refresh=force_refresh)
@@ -147,11 +147,11 @@ dfr = dfr.with_columns([
 # %% [markdown] id="rNgGRGgvZXYV"
 # ## Load Data to Google Drive in Parquet format
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 645, "status": "ok", "timestamp": 1771613721906, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="HgZ30O8_ZWuN" outputId="501bf74a-6729-431b-8940-140b49b23912"
+# %% id="HgZ30O8_ZWuN"
 save_df(dfe, 'ex')
 save_df(dfr, 'rev')
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 3742, "status": "ok", "timestamp": 1771613756845, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="_RHgZb7RYkar" outputId="adba42f1-fb41-41fb-9117-4ec31cea3d21"
+# %% id="_RHgZb7RYkar"
 # !jupytext --set-formats ipynb,py /content/drive/MyDrive/dnrec_dpr_revex_engine/dpr_revex/01_load.ipynb
 
 # %% id="gSgP7l7UZfaW"
