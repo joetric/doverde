@@ -57,21 +57,22 @@ def init_repo():
 # %% [markdown] id="FXd2d8XSvnkv"
 # ## Convert Jupyter notebooks to .py
 
-# %% id="f9QtbH1Ru16o" executionInfo={"status": "error", "timestamp": 1771906050241, "user_tz": 300, "elapsed": 17, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} colab={"base_uri": "https://localhost:8080/", "height": 211} outputId="640debff-0c52-4673-c7f9-d26079f6c09d"
+# %% id="f9QtbH1Ru16o" executionInfo={"status": "ok", "timestamp": 1771906074916, "user_tz": 300, "elapsed": 9500, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} colab={"base_uri": "https://localhost:8080/"} outputId="23675ecb-e1a0-41a5-b1c2-52400abac071"
 import subprocess
 
-for nb in SRC_PATH.glob('*.ipynb'):
+nb_dir = PROJ / 'doverde'
+for nb in nb_dir.glob('*.ipynb'):
     result = subprocess.run(['jupytext', '--to', 'py', str(nb)], capture_output=True, text=True)
     print(f'{"✓" if result.returncode == 0 else "✗"} {nb.name}')
 
 # %% [markdown] id="kN7nPAEN0nyQ"
 # ## Git commit
 
-# %% id="gkSjkskybFVE" executionInfo={"status": "aborted", "timestamp": 1771906050307, "user_tz": 300, "elapsed": 1599, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="gkSjkskybFVE" executionInfo={"status": "ok", "timestamp": 1771906079662, "user_tz": 300, "elapsed": 27, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} colab={"base_uri": "https://localhost:8080/"} outputId="eb17f709-8d2b-4923-e334-3b829c2200ca"
 print("--- PRE-COMMIT STATUS ---")
 # !git -C {PROJ} status
 
-# %% id="bgHuOEu5vt74" executionInfo={"status": "aborted", "timestamp": 1771906050343, "user_tz": 300, "elapsed": 5, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="bgHuOEu5vt74" executionInfo={"status": "ok", "timestamp": 1771906102730, "user_tz": 300, "elapsed": 7844, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} colab={"base_uri": "https://localhost:8080/"} outputId="715d63e5-ec64-48be-fb76-f1f6f454d58f"
 # !git config --global user.email "joseph.tricarico@delaware.gov"
 # !git config --global user.name "Joseph Tricarico"
 # !git -C {PROJ} pull origin main
@@ -81,6 +82,3 @@ print("--- PRE-COMMIT STATUS ---")
 msg = input('Commit message: ')
 # !git -C {PROJ} commit -m "{msg}"
 # !git -C {PROJ} push origin main
-
-# %% id="be6DjSwVxILc" executionInfo={"status": "aborted", "timestamp": 1771906050374, "user_tz": 300, "elapsed": 33, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
-# !git -C {PROJ} status
