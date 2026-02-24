@@ -22,7 +22,7 @@
 #
 # You could edit the fetch method on this page to use a Socrata API key (may allow for higher limits).
 
-# %% colab={"base_uri": "https://localhost:8080/"} id="R7sxD9UXB2lr" outputId="85710640-cd9c-41ce-c880-3b0b73495dd4"
+# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 2540, "status": "ok", "timestamp": 1771906706332, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="R7sxD9UXB2lr" outputId="bd2d3ee5-19d8-478b-de16-f50fd54fb520"
 # @title
 from datetime import datetime
 import sys
@@ -38,7 +38,7 @@ sys.path.append('/content/drive/MyDrive/doverde/doverde')
 from config import cfg, FISC_PD_TO_CAL_MO
 
 
-# %% id="MxRbieC7vCMU" executionInfo={"status": "aborted", "timestamp": 1771906629881, "user_tz": 300, "elapsed": 3, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="MxRbieC7vCMU" executionInfo={"status": "ok", "timestamp": 1771906706460, "user_tz": 300, "elapsed": 95, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 def _fp_to_cal_mo(fp: int) -> int:
     """Convert fiscal period to calendar month for a July-start FY (e.g. Del.)
 
@@ -111,7 +111,7 @@ def save_df(df, data_id_key):
 # %% [markdown] id="3JWVweXBNUp5"
 # ## Fetch Data
 
-# %% id="of78GLICB6Tr" executionInfo={"status": "aborted", "timestamp": 1771906629903, "user_tz": 300, "elapsed": 4, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% colab={"base_uri": "https://localhost:8080/"} id="of78GLICB6Tr" outputId="e9016fd6-e95e-4a4c-e017-fc1a71ecc1cf" executionInfo={"status": "ok", "timestamp": 1771906721749, "user_tz": 300, "elapsed": 15285, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 force_refresh = getattr(cfg.socrata, 'force_refresh', False)
 dfe = fetch_dataset('ex', force_refresh=force_refresh)
 dfr = fetch_dataset('rev', force_refresh=force_refresh)
@@ -123,7 +123,7 @@ dfr = fetch_dataset('rev', force_refresh=force_refresh)
 #
 # Types converted below.
 
-# %% id="EKxuDnThHEjs" executionInfo={"status": "aborted", "timestamp": 1771906629906, "user_tz": 300, "elapsed": 4, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="EKxuDnThHEjs" executionInfo={"status": "ok", "timestamp": 1771906722018, "user_tz": 300, "elapsed": 263, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 dfe = dfe.with_columns([
     pl.col('fiscal_year').cast(pl.UInt16),
     pl.col('fiscal_period').cast(pl.UInt8),
@@ -136,7 +136,7 @@ dfe = dfe.with_columns([
 # %% [markdown] id="-mQGJuHhQ2bU"
 # ## Transform Revenue Data
 
-# %% id="0vhHH81RZVwd" executionInfo={"status": "aborted", "timestamp": 1771906629908, "user_tz": 300, "elapsed": 29198, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="0vhHH81RZVwd" executionInfo={"status": "ok", "timestamp": 1771906722028, "user_tz": 300, "elapsed": 7, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 dfr = dfr.with_columns([
     pl.col('fiscal_year').cast(pl.UInt16),
     pl.col(['general_fund', 'federal_fund', 'capital_fund', 'special_fund']).cast(pl.Decimal(scale=2)),
@@ -147,6 +147,6 @@ dfr = dfr.with_columns([
 # %% [markdown] id="rNgGRGgvZXYV"
 # ## Load Data to Google Drive in Parquet format
 
-# %% id="HgZ30O8_ZWuN" executionInfo={"status": "aborted", "timestamp": 1771906629911, "user_tz": 300, "elapsed": 29200, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="HgZ30O8_ZWuN" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771906722269, "user_tz": 300, "elapsed": 244, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="8f9cee83-9296-4b94-9dc8-df12ef2bfb8c"
 save_df(dfe, 'ex')
 save_df(dfr, 'rev')
