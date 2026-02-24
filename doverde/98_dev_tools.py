@@ -13,8 +13,25 @@
 
 # %% [markdown] id="8lP7mci0vqPa"
 # # Dev Tools
+#
+# Designed to work with GITHUB_TOKEN set in Google Colab settings.
+#
+# ### Setup
+#
+# Run init_repo() and clone_repo() as needed.
+#
+# ### Workflow
+#
+# 1.   Converts IPython / Jupyter notebooks to .py files
+# 2.   Displays repo status (with git status)
+# 3.   Fetches origin and merges into main branch
+# 4.   Prompts for commit message
+# 5.   Pushes new commit
+#
+#
+#
 
-# %% id="4Mna7DKmvSgF" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771906712208, "user_tz": 300, "elapsed": 950, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="4fed1478-9e55-493f-b051-f63b732c8b99"
+# %% id="4Mna7DKmvSgF" colab={"base_uri": "https://localhost:8080/", "height": 356} executionInfo={"status": "error", "timestamp": 1771955377232, "user_tz": 300, "elapsed": 121679, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="2c3f325a-d1cd-4e40-b033-f4351d6f90c9"
 import os, subprocess, sys
 from pathlib import Path
 from google.colab import drive, userdata
@@ -28,7 +45,7 @@ REPO = 'joetric/doverde'
 GITHUB_TOKEN = userdata.get('GITHUB_TOKEN')
 
 
-# %% id="noACbGrpv5XK"
+# %% id="noACbGrpv5XK" executionInfo={"status": "aborted", "timestamp": 1771955377215, "user_tz": 300, "elapsed": 121857, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 def clone_repo():
     token = userdata.get('GITHUB_TOKEN') # get GitHub token for colab; repo and content scoped
     result = subprocess.run(
@@ -57,7 +74,7 @@ def init_repo():
 # %% [markdown] id="FXd2d8XSvnkv"
 # ## Convert Jupyter notebooks to .py
 
-# %% id="f9QtbH1Ru16o" executionInfo={"status": "ok", "timestamp": 1771906721719, "user_tz": 300, "elapsed": 9517, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="78cec1ae-68f7-4d8e-db44-f95b564f995a" colab={"base_uri": "https://localhost:8080/"}
+# %% id="f9QtbH1Ru16o" executionInfo={"status": "aborted", "timestamp": 1771955377222, "user_tz": 300, "elapsed": 121860, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 import subprocess
 
 nb_dir = PROJ / 'doverde'
@@ -68,11 +85,11 @@ for nb in nb_dir.glob('*.ipynb'):
 # %% [markdown] id="kN7nPAEN0nyQ"
 # ## Git commit
 
-# %% id="gkSjkskybFVE" executionInfo={"status": "ok", "timestamp": 1771906721942, "user_tz": 300, "elapsed": 221, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="22533ea0-2448-44ac-d7e1-1682881ed6c7" colab={"base_uri": "https://localhost:8080/"}
+# %% id="gkSjkskybFVE" executionInfo={"status": "aborted", "timestamp": 1771955377225, "user_tz": 300, "elapsed": 121860, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 print("--- PRE-COMMIT STATUS ---")
 # !git -C {PROJ} status
 
-# %% id="bgHuOEu5vt74" outputId="335a14d5-c28a-4976-e65f-28d0a22bfe99" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771906931749, "user_tz": 300, "elapsed": 16399, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="bgHuOEu5vt74" executionInfo={"status": "aborted", "timestamp": 1771955377227, "user_tz": 300, "elapsed": 121859, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 # !git config --global user.email "joseph.tricarico@delaware.gov"
 # !git config --global user.name "Joseph Tricarico"
 # !git -C {PROJ} pull origin main
@@ -82,3 +99,6 @@ print("--- PRE-COMMIT STATUS ---")
 msg = input('Commit message: ')
 # !git -C {PROJ} commit -m "{msg}"
 # !git -C {PROJ} push origin main
+
+# %% id="6_o8yoar5XRm" executionInfo={"status": "aborted", "timestamp": 1771955377259, "user_tz": 300, "elapsed": 121888, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# !git -C {PROJ} pull --rebase origin main
