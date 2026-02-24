@@ -14,7 +14,7 @@
 # %% [markdown] id="8lP7mci0vqPa"
 # # Dev Tools
 
-# %% id="4Mna7DKmvSgF" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771906050061, "user_tz": 300, "elapsed": 1263, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="fdfbfc02-d631-4bcc-dd84-7d8a2c1ce7b0"
+# %% id="4Mna7DKmvSgF" colab={"base_uri": "https://localhost:8080/"} executionInfo={"status": "ok", "timestamp": 1771906528560, "user_tz": 300, "elapsed": 1125, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="5abd9e5a-4476-41a6-8dc0-a78bbff56ab7"
 import os, subprocess, sys
 from pathlib import Path
 from google.colab import drive, userdata
@@ -28,7 +28,7 @@ REPO = 'joetric/doverde'
 GITHUB_TOKEN = userdata.get('GITHUB_TOKEN')
 
 
-# %% id="noACbGrpv5XK" executionInfo={"status": "ok", "timestamp": 1771906050183, "user_tz": 300, "elapsed": 89, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="noACbGrpv5XK" executionInfo={"status": "ok", "timestamp": 1771906528589, "user_tz": 300, "elapsed": 12, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 def clone_repo():
     token = userdata.get('GITHUB_TOKEN') # get GitHub token for colab; repo and content scoped
     result = subprocess.run(
@@ -57,7 +57,7 @@ def init_repo():
 # %% [markdown] id="FXd2d8XSvnkv"
 # ## Convert Jupyter notebooks to .py
 
-# %% id="f9QtbH1Ru16o" executionInfo={"status": "ok", "timestamp": 1771906074916, "user_tz": 300, "elapsed": 9500, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} colab={"base_uri": "https://localhost:8080/"} outputId="23675ecb-e1a0-41a5-b1c2-52400abac071"
+# %% id="f9QtbH1Ru16o"
 import subprocess
 
 nb_dir = PROJ / 'doverde'
@@ -68,11 +68,11 @@ for nb in nb_dir.glob('*.ipynb'):
 # %% [markdown] id="kN7nPAEN0nyQ"
 # ## Git commit
 
-# %% id="gkSjkskybFVE" executionInfo={"status": "ok", "timestamp": 1771906079662, "user_tz": 300, "elapsed": 27, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} colab={"base_uri": "https://localhost:8080/"} outputId="eb17f709-8d2b-4923-e334-3b829c2200ca"
+# %% id="gkSjkskybFVE"
 print("--- PRE-COMMIT STATUS ---")
 # !git -C {PROJ} status
 
-# %% id="bgHuOEu5vt74" executionInfo={"status": "ok", "timestamp": 1771906102730, "user_tz": 300, "elapsed": 7844, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} colab={"base_uri": "https://localhost:8080/"} outputId="715d63e5-ec64-48be-fb76-f1f6f454d58f"
+# %% id="bgHuOEu5vt74"
 # !git config --global user.email "joseph.tricarico@delaware.gov"
 # !git config --global user.name "Joseph Tricarico"
 # !git -C {PROJ} pull origin main

@@ -3,7 +3,7 @@ from pathlib import Path
 from google.colab import drive
 
 drive.mount('/content/drive') # prob already mtd
-PROJECT_ROOT = Path('/content/drive/MyDrive/dnrec_dpr_revex_engine')
+PROJECT_ROOT = Path('/content/drive/MyDrive/doverde')
 
 FISC_PD_TO_CAL_MO = {1:7, 2:8, 3:9, 4:10, 5:11, 6:12, 7:1, 8:2, 9:3, 10:4, 11:5, 12:6}
 
