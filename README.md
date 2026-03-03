@@ -2,6 +2,7 @@
 Agency-agnostic automated revenue and expense ETL and analysis using Delaware open revenue and checkbook datasets, Polars, and the Socrata Open Data API. Designed to run in Google Colab using Google Drive.
 
 ## Configuration in config.yaml
+- Copy example file to config.yaml (e.g. ```cp config.yaml.example config.yaml``` and update.
 - By default, data will only download if dataset on [data.delaware.gov](https://data.delaware.gov/) is newer. To change, set `force_refresh` to `True`.
 - Adjust results limit by setting `limit`. Low limit recommended for testing. Use `force_refresh` after raising limit.
 
