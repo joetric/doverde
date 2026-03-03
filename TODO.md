@@ -1,6 +1,0 @@
-./doverde/98_dev_tools.py:#TODO: move these settings to config.yaml; not everyone may use Colab
-./doverde/98_dev_tools.py:#TODO: use list instead of single dir, or allow for recursive dir notebook search
-./doverde/98_dev_tools.py:#TODO: write some header for the TODO.md
-./doverde/98_dev_tools.py:# !grep -r "#TODO" --include='*.py' . > TODO.md
-./doverde/02_eda.py:LAST_FY_STR = '2025' #TODO: make dynamic function for current FY (then can just do -1)
-./studies/dnrec_dpr/10_analysis_dnrec_dpr.py:CURRENT_FY = 2026 #TODO make dynamic function
