@@ -1,4 +1,9 @@
-# config.yaml
+# config.yaml.template
+
+# TO USE:
+# Copy this file to config.yaml. Change the examples settings below.
+# At a minimum you'll likely want to change limit, department and division.
+
 paths:
   # Base directory for Parquet files in Drive
   raw_dir: "/content/drive/MyDrive/doverde/data/raw"
@@ -6,8 +11,7 @@ paths:
 
 socrata:
   api_url: "data.delaware.gov"
-  # limit: 5 # just to test; be kind to Socrata
-  limit: 500_000
+  limit: 5 # just to test; be kind to Socrata
   force_refresh: True
   api_data_ids:
     ex: "5s6n-7hpx"
@@ -36,4 +40,5 @@ socrata:
       - special_fund
       #-department
       #-division
+
 
