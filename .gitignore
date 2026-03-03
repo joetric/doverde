@@ -6,7 +6,8 @@ config.yaml
 
 # project dirs
 /brand/
-# /data/
+/data/
+/metadata/
 /pubs/
 
 # notebooks - these will be converted to .py with dev tools
