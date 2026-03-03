@@ -31,7 +31,7 @@
 #
 #
 
-# %% id="4Mna7DKmvSgF" colab={"base_uri": "https://localhost:8080/", "height": 356} executionInfo={"status": "error", "timestamp": 1771955377232, "user_tz": 300, "elapsed": 121679, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="2c3f325a-d1cd-4e40-b033-f4351d6f90c9"
+# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 1242, "status": "ok", "timestamp": 1772562483883, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="4Mna7DKmvSgF" outputId="5319b86b-a12c-4252-aa2b-4188c7445268"
 import os, subprocess, sys
 from pathlib import Path
 from google.colab import drive, userdata
@@ -42,10 +42,14 @@ SRC_PATH = str(PROJ / 'doverde')
 sys.path.append(SRC_PATH)
 
 REPO = 'joetric/doverde'
+#TODO: move these settings to config; not everyone may use Colab
 GITHUB_TOKEN = userdata.get('GITHUB_TOKEN')
+GH_EMAIL = userdata.get('GH_EMAIL')
+GH_FULL_NAME = userdata.get('GH_FULL_NAME')
 
+# %cd {PROJ}
 
-# %% id="noACbGrpv5XK" executionInfo={"status": "aborted", "timestamp": 1771955377215, "user_tz": 300, "elapsed": 121857, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="noACbGrpv5XK"
 def clone_repo():
     token = userdata.get('GITHUB_TOKEN') # get GitHub token for colab; repo and content scoped
     result = subprocess.run(
@@ -72,33 +76,34 @@ def init_repo():
 # clone_repo() # uncomment only once to clone repo.
 
 # %% [markdown] id="FXd2d8XSvnkv"
-# ## Convert Jupyter notebooks to .py
+# ## Convert Jupyter notebooks to .py; compile TODOs
 
-# %% id="f9QtbH1Ru16o" executionInfo={"status": "aborted", "timestamp": 1771955377222, "user_tz": 300, "elapsed": 121860, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
-import subprocess
-
+# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 9429, "status": "ok", "timestamp": 1772561393501, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="f9QtbH1Ru16o" outputId="224f3b36-f7ce-47c0-8c98-f246843d589b"
 nb_dir = PROJ / 'doverde'
 for nb in nb_dir.glob('*.ipynb'):
     result = subprocess.run(['jupytext', '--to', 'py', str(nb)], capture_output=True, text=True)
     print(f'{"✓" if result.returncode == 0 else "✗"} {nb.name}')
 
+#TODO: write some header for the TODO.md
+# !grep -r "#TODO" --include='*.py' . > TODO.md
+
 # %% [markdown] id="kN7nPAEN0nyQ"
 # ## Git commit
 
-# %% id="gkSjkskybFVE" executionInfo={"status": "aborted", "timestamp": 1771955377225, "user_tz": 300, "elapsed": 121860, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 430, "status": "ok", "timestamp": 1772561393935, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="gkSjkskybFVE" outputId="8b4d996b-610c-4fd8-dcca-a3dda86790af"
 print("--- PRE-COMMIT STATUS ---")
-# !git -C {PROJ} status
+# !git status
 
-# %% id="bgHuOEu5vt74" executionInfo={"status": "aborted", "timestamp": 1771955377227, "user_tz": 300, "elapsed": 121859, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
-# !git config --global user.email "joseph.tricarico@delaware.gov"
-# !git config --global user.name "Joseph Tricarico"
-# !git -C {PROJ} pull origin main
-# !git -C {PROJ} add *.py *.yaml *.toml *.csv .gitignore
-# !git -C {PROJ} status
+# %% colab={"base_uri": "https://localhost:8080/", "height": 669} executionInfo={"elapsed": 6713, "status": "error", "timestamp": 1772561400650, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="bgHuOEu5vt74" outputId="d42f1933-9abc-428c-9703-5cd100744e17"
+# !git config --global user.email "{GH_EMAIL}"
+# !git config --global user.name "{GH_FULL_NAME}"
+# !git pull origin main
+# !git add *.py *.yaml *.toml .gitignore # *.csv
+# !git status
 
 msg = input('Commit message: ')
-# !git -C {PROJ} commit -m "{msg}"
-# !git -C {PROJ} push origin main
+# !git commit -m "{msg}"
+# !git push origin main
 
-# %% id="6_o8yoar5XRm" executionInfo={"status": "aborted", "timestamp": 1771955377259, "user_tz": 300, "elapsed": 121888, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
-# !git -C {PROJ} pull --rebase origin main
+# %% id="6_o8yoar5XRm"
+# # !git pull --rebase origin main
