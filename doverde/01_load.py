@@ -16,7 +16,7 @@
 # # Delaware Revenue / Expense Data ETL
 
 # %% [markdown] id="oONrAT6HRW4M"
-# ## Load libraries and our config module which loads config.yaml
+# ## Load libraries and our config module which loads config.yaml; define functions
 #
 # config.yaml (in project dir) defines filters (e.g. DNREC/DPR), default API limits, default columns to fetch, API URL and keyed Socrata data IDs. Runtime must be restarted for changes to take effect.
 #
@@ -38,7 +38,7 @@ sys.path.append('/content/drive/MyDrive/doverde/doverde')
 from config import cfg, FISC_PD_TO_CAL_MO
 
 
-# %% id="MxRbieC7vCMU" executionInfo={"status": "ok", "timestamp": 1771906706460, "user_tz": 300, "elapsed": 95, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="MxRbieC7vCMU"
 def _fp_to_cal_mo(fp: int) -> int:
     """Convert fiscal period to calendar month for a July-start FY (e.g. Del.)
 
@@ -51,10 +51,12 @@ def _fp_to_cal_mo(fp: int) -> int:
     #Jan:Jul ... Dec:Jun
     return FISC_PD_TO_CAL_MO[int(fp)]
 
+
 def _get_remote_updated_at(client, data_id) -> datetime:
     """Get the last updated timestamp from Socrata dataset metadata."""
     metadata = client.get_metadata(data_id)
     return datetime.fromtimestamp(metadata['rowsUpdatedAt'])
+
 
 def _get_local_updated_at(data_id_key) -> datetime | None:
     """Get the last modified time of the local parquet file, or None if it doesn't exist."""
@@ -62,6 +64,7 @@ def _get_local_updated_at(data_id_key) -> datetime | None:
     if not filepath.exists():
         return None
     return datetime.fromtimestamp(filepath.stat().st_mtime)
+
 
 def fetch_dataset(data_id_key, force_refresh=False, **query_overrides):
     with Socrata(cfg.socrata.api_url, None) as client:
@@ -99,6 +102,7 @@ def fetch_dataset(data_id_key, force_refresh=False, **query_overrides):
         results = client.get(data_id, **fetch_kwargs)
         return pl.from_dicts(results)
 
+
 def save_df(df, data_id_key):
     """Save a Polars DataFrame as parquet"""
     proc_dir = Path(cfg.paths.processed_dir)
@@ -123,7 +127,7 @@ dfr = fetch_dataset('rev', force_refresh=force_refresh)
 #
 # Types converted below.
 
-# %% id="EKxuDnThHEjs" executionInfo={"status": "ok", "timestamp": 1771906722018, "user_tz": 300, "elapsed": 263, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="EKxuDnThHEjs"
 dfe = dfe.with_columns([
     pl.col('fiscal_year').cast(pl.UInt16),
     pl.col('fiscal_period').cast(pl.UInt8),
@@ -136,7 +140,7 @@ dfe = dfe.with_columns([
 # %% [markdown] id="-mQGJuHhQ2bU"
 # ## Transform Revenue Data
 
-# %% id="0vhHH81RZVwd" executionInfo={"status": "ok", "timestamp": 1771906722028, "user_tz": 300, "elapsed": 7, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="0vhHH81RZVwd"
 dfr = dfr.with_columns([
     pl.col('fiscal_year').cast(pl.UInt16),
     pl.col(['general_fund', 'federal_fund', 'capital_fund', 'special_fund']).cast(pl.Decimal(scale=2)),

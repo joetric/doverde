@@ -1,0 +1,4 @@
+polars==1.35.2
+protobuf==7.34.0
+PyYAML==6.0.3
+sodapy==2.2.0

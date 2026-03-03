@@ -38,12 +38,12 @@ DATA_DIR = Path(cfg.paths.raw_dir)
 data_table.enable_dataframe_formatter()
 
 # %% [markdown] id="30aBKmeUAWqI"
-# ## Load files to DataFrames; filter tables
+# ## Load files to data frames; filter tables
 
 # %% id="bWLLM-cw6XpQ" executionInfo={"status": "ok", "timestamp": 1772563728860, "user_tz": 300, "elapsed": 86, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
 # create conditional to include current, incomplete FY
 _conditional = pl.col('fiscal_year') != CURRENT_FY
-
+# make Data Frames
 dfr = pl.read_parquet(DATA_DIR / 'rev.parquet').filter(_conditional)
 dfe = pl.read_parquet(DATA_DIR / 'ex.parquet').filter(_conditional)
 
