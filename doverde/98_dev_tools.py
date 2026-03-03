@@ -31,7 +31,7 @@
 #
 #
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 7570, "status": "ok", "timestamp": 1772564769974, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="4Mna7DKmvSgF" outputId="f48c0190-1983-4cc8-d710-31ca9a687c5b"
+# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 5563, "status": "ok", "timestamp": 1772564837628, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="4Mna7DKmvSgF" outputId="7ab66d0c-2426-4479-da2b-d25e9114a26b"
 # !pip -q install pipreqs
 
 import os, subprocess, sys
@@ -51,12 +51,12 @@ GH_EMAIL = userdata.get('GH_EMAIL')
 GH_FULL_NAME = userdata.get('GH_FULL_NAME')
 # path to notebooks to convert
 #TODO: use list instead of single dir, or allow for recursive dir notebook search
-# NB_DIR = PROJ / 'doverde'
-NB_DIR = PROJ / 'studies/dnrec_dpr'
+NB_DIR = PROJ / 'doverde'
+# NB_DIR = PROJ / 'studies/dnrec_dpr'
 
 # %cd {PROJ}
 
-# %% executionInfo={"elapsed": 2, "status": "ok", "timestamp": 1772564769980, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="noACbGrpv5XK"
+# %% executionInfo={"elapsed": 6, "status": "ok", "timestamp": 1772564840299, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="noACbGrpv5XK"
 def clone_repo():
     token = userdata.get('GITHUB_TOKEN') # get GitHub token for colab; repo and content scoped
     result = subprocess.run(
@@ -85,13 +85,13 @@ def init_repo():
 # %% [markdown] id="FXd2d8XSvnkv"
 # ## Convert Jupyter notebooks to .py; compile TODOs; update requirements
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 11374, "status": "ok", "timestamp": 1772564781356, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="f9QtbH1Ru16o" outputId="b354afa3-21e5-479f-b1ae-0e5a0ecdcc37"
+# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 12475, "status": "ok", "timestamp": 1772564854153, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="f9QtbH1Ru16o" outputId="d37fe7b0-2501-4565-bae8-23f1ec667be5"
 for nb in NB_DIR.glob('*.ipynb'):
     result = subprocess.run(['jupytext', '--to', 'py', str(nb)], capture_output=True, text=True)
     print(f'{"✓" if result.returncode == 0 else "✗"} {nb.name}')
 
 #TODO: write some header for the TODO.md
-# !grep -r "#TODO" --include='*.py' . > TODO.md
+# !grep -r "#TODO" --include='*.py' . > TODO.txt
 
 # make/update requirements.txt
 # !pipreqs {PROJ} --force
@@ -99,11 +99,11 @@ for nb in NB_DIR.glob('*.ipynb'):
 # %% [markdown] id="kN7nPAEN0nyQ"
 # ## Git commit
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 425, "status": "ok", "timestamp": 1772564781786, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="gkSjkskybFVE" outputId="96e4fb67-7c57-485f-908c-98ae6ab19abb"
+# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 323, "status": "ok", "timestamp": 1772564854489, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="gkSjkskybFVE" outputId="fa4f8700-5d10-4a21-f226-a9530ede6b24"
 print("--- PRE-COMMIT STATUS ---")
 # !git status
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 783} executionInfo={"elapsed": 15251, "status": "error", "timestamp": 1772564824303, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="bgHuOEu5vt74" outputId="0e7f7885-8e0e-423f-83ff-fd0e2e7a9551"
+# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 20050, "status": "ok", "timestamp": 1772564874541, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="bgHuOEu5vt74" outputId="ecf59fd2-ecb8-4e38-846a-dbebf55cac1c"
 # !git config --global user.email "{GH_EMAIL}"
 # !git config --global user.name "{GH_FULL_NAME}"
 # !git pull origin main
@@ -120,6 +120,6 @@ msg = input('Commit message: ')
 # %% [markdown] id="V-my0n5HFyam"
 # ## Show current requirements.txt
 
-# %% id="BBekoq7FF1CW" executionInfo={"status": "aborted", "timestamp": 1772564806599, "user_tz": 300, "elapsed": 44237, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% colab={"base_uri": "https://localhost:8080/"} id="BBekoq7FF1CW" executionInfo={"status": "ok", "timestamp": 1772564878314, "user_tz": 300, "elapsed": 15, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="ad1bdd31-a00a-4c7b-c064-5a37b1e0f108"
 with open(f'{PROJ}/requirements.txt', 'r') as f:
     print(f.read())
