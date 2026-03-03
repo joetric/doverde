@@ -1,6 +1,8 @@
 ########################################################
-###      .gitignore for dnrec-dpr-revex-engine       ###
+###      .gitignore for doverde                      ###
 ########################################################
+
+config.yaml
 
 # project dirs
 /brand/
@@ -14,7 +16,6 @@
 *.pkl
 *.parquet
 *.xlsx
-
 
 # Secrets
 .env
