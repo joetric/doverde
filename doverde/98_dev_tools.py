@@ -31,7 +31,7 @@
 #
 #
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 4687, "status": "ok", "timestamp": 1772564980830, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="4Mna7DKmvSgF" outputId="c568842d-e298-4774-e4d6-ddcb471720f1"
+# %% id="4Mna7DKmvSgF"
 # !pip -q install pipreqs
 
 import os, subprocess, sys
@@ -51,12 +51,12 @@ GH_EMAIL = userdata.get('GH_EMAIL')
 GH_FULL_NAME = userdata.get('GH_FULL_NAME')
 # path to notebooks to convert
 #TODO: use list instead of single dir, or allow for recursive dir notebook search
-NB_DIR = PROJ / 'doverde'
-# NB_DIR = PROJ / 'studies/dnrec_dpr'
+# NB_DIR = PROJ / 'doverde'
+NB_DIR = PROJ / 'studies/dnrec_dpr'
 
 # %cd {PROJ}
 
-# %% executionInfo={"elapsed": 4, "status": "ok", "timestamp": 1772564980836, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="noACbGrpv5XK"
+# %% id="noACbGrpv5XK"
 def clone_repo():
     token = userdata.get('GITHUB_TOKEN') # get GitHub token for colab; repo and content scoped
     result = subprocess.run(
@@ -85,7 +85,7 @@ def init_repo():
 # %% [markdown] id="FXd2d8XSvnkv"
 # ## Convert Jupyter notebooks to .py; compile TODOs; update requirements
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 14049, "status": "ok", "timestamp": 1772564994888, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="f9QtbH1Ru16o" outputId="76c53b6e-0925-4cfe-df54-01e4c8484759"
+# %% id="f9QtbH1Ru16o"
 for nb in NB_DIR.glob('*.ipynb'):
     result = subprocess.run(['jupytext', '--to', 'py', str(nb)], capture_output=True, text=True)
     print(f'{"✓" if result.returncode == 0 else "✗"} {nb.name}')
@@ -99,11 +99,11 @@ for nb in NB_DIR.glob('*.ipynb'):
 # %% [markdown] id="kN7nPAEN0nyQ"
 # ## Git commit
 
-# %% colab={"base_uri": "https://localhost:8080/"} executionInfo={"elapsed": 371, "status": "ok", "timestamp": 1772564995263, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}, "user_tz": 300} id="gkSjkskybFVE" outputId="c35c0dc9-abc9-4323-ba4b-a0c2cda99935"
+# %% id="gkSjkskybFVE"
 print("--- PRE-COMMIT STATUS ---")
-# !git status
+# !git pull https://{GITHUB_TOKEN}@github.com/{REPO}.git main
 
-# %% colab={"base_uri": "https://localhost:8080/"} id="bgHuOEu5vt74" outputId="69c1fe2f-eefa-4d5b-a863-12a7685598fe"
+# %% id="bgHuOEu5vt74"
 # !git config --global user.email "{GH_EMAIL}"
 # !git config --global user.name "{GH_FULL_NAME}"
 # !git pull origin main
@@ -113,9 +113,6 @@ print("--- PRE-COMMIT STATUS ---")
 msg = input('Commit message: ')
 # !git commit -m "{msg}"
 # !git push https://{GITHUB_TOKEN}@github.com/{REPO}.git main
-
-# %% id="6_o8yoar5XRm"
-# # !git pull --rebase origin main
 
 # %% [markdown] id="V-my0n5HFyam"
 # ## Show current requirements.txt
