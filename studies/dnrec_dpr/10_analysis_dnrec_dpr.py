@@ -20,7 +20,9 @@
 #
 # *   Seasonal variation in DPR benefits-to-wages ratio
 #
-# *   List item
+# *   State minimum wage v. casual / seasonal wage expense
+#
+# *   Revenue analysis
 #
 #
 
@@ -100,7 +102,7 @@ data_table.enable_dataframe_formatter()
 # %% [markdown] id="fcUfu1yXwgGi"
 # ## Filter and load data
 
-# %% id="4DbhjVXTwaSI" executionInfo={"status": "ok", "timestamp": 1772585572145, "user_tz": 300, "elapsed": 14, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="4DbhjVXTwaSI"
 # --- FILTER AND LOAD DATA ---
 fy_range_cond = pl.col('fiscal_year') != CURRENT_FY
 # load dfr "data frame: revenue"
@@ -124,14 +126,14 @@ dfe = (pl.read_parquet(DATA_DIR / 'ex.parquet')
 # %% [markdown] id="v_vGN5J9hfjz"
 # ### Explore revenue by category
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 0} cellView="form" id="nqPN2sR3gpYj" executionInfo={"status": "ok", "timestamp": 1772585572225, "user_tz": 300, "elapsed": 78, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="ef51c103-4cbf-4329-d236-b794fed9b2fe"
+# %% colab={"base_uri": "https://localhost:8080/"} cellView="form" id="nqPN2sR3gpYj" executionInfo={"status": "ok", "timestamp": 1772585572225, "user_tz": 300, "elapsed": 78, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="ef51c103-4cbf-4329-d236-b794fed9b2fe"
 # @title
 dfr.group_by('category').agg(pl.sum('special_fund')).sort('special_fund', descending=True).to_pandas()
 
 # %% [markdown] id="2w1NXB3ghI5H"
 # ### Explore payments by category
 
-# %% colab={"base_uri": "https://localhost:8080/", "height": 0} id="25776306" executionInfo={"status": "ok", "timestamp": 1772585572260, "user_tz": 300, "elapsed": 33, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="ca2c8a51-5105-46db-be49-b59adf8f191e"
+# %% colab={"base_uri": "https://localhost:8080/"} id="25776306" executionInfo={"status": "ok", "timestamp": 1772585572260, "user_tz": 300, "elapsed": 33, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}} outputId="ca2c8a51-5105-46db-be49-b59adf8f191e"
 category_amounts = dfe.group_by('category').agg(pl.sum('amount').alias('total_amount')).sort('total_amount', descending=True)
 display(category_amounts.to_pandas())
 
@@ -184,7 +186,7 @@ mo_lab.describe().to_pandas().round(1) # show descriptive stats
 #
 # H<sub>1</sub>: Mean monthly benefit-to-salary is lower in summer months.
 
-# %% id="croQ1vW9wEau" executionInfo={"status": "ok", "timestamp": 1772585572289, "user_tz": 300, "elapsed": 2, "user": {"displayName": "Joseph Tricarico", "userId": "06693078329233897993"}}
+# %% id="croQ1vW9wEau"
 summer_cond = pl.col.mo.is_between(6, 8)
 summer = mo_lab.filter(summer_cond)['ratio_pct'].cast(pl.Float64) # need to cast for some stats test to work
 offseason = mo_lab.filter(~summer_cond)['ratio_pct'].cast(pl.Float64)
